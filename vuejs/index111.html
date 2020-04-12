@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{ header.toLocaleUpperCase() }}</h1>
+        <button v-if="state==='default'" class="btn btn-primary" @click="changeState('edit')">Add Item</button>
+        <button v-else class="btn btn-cancel" @click="changeState('default')">Cancel</button>
+        <div v-if="state==='edit'" class="add-item-form">
+            Add new Item: 
+            <input type="text" v-model="newItem" placeholder="Add an Item" @keyup.enter="saveItem"></input>
+            <button class="btn btn-primary" 
+            v-bind:disabled="newItem.length===0"
+            @click="saveItem">Save Item</button>
+        </div>
+        <a v-bind:href="newItem" target="_blank">Dynamic Link</a>
+        <ul>
+            <li v-for="(item, i) in reversedItems" 
+            :class="{strickout: item.purchased}">
+            {{item.label}} ({{i}})</li>
+        </ul>
+        <template v-for="(item, index) in reversedItems">
+            <h1>{{item.label}}</h1>
+            <p>{{index}}</p>
+        </template>
+        <p v-if="items.length===0">No record found. Please add to get nice feature!</p>
+    </div>
+<script>
+    var shoppingList = new Vue({
+	el: '#app',
+    data: {
+        state: 'default',
+        title: 'Hello world',
+        header: 'Shipping List App',
+        newItem: '',
+        items: [
+            {
+                label: '10 party hats',
+                purchased: false,
+            },
+            {
+                label: '2 board games',
+                purchased: true,
+            },
+            {
+                label: '20 cups',
+                purchased: false,
+            },            
+            // '10 party hats',
+            // '2 board games',
+            // '20 cups',
+        ]
+    },
+    computed: {
+        reversedItems() {
+            return this.items.slice(0).reverse();
+        }
+    },
+    methods: {
+        saveItem: function() {
+            this.items.push({
+                label: this.newItem,
+                purchased: false,
+            });
+            this.newItem = '';
+        },
+        changeState: function(newState) {
+            this.state = newState;
+            this.newItem = '';
+        }
+    }
+    });
+</script>    
+</body>
+</html>
+
+<!-- 1. vue js fundamentals
+2. Form Validation
+3. Dynamic form
+4. custom vue directives
+5. vue.js components fundamentals
+6. vue router
+7. vue js master class (real world application)
+8. vuejs+firebase
+9. vuejs+firebase authentication
+10 Nuxt
+11.Async data with nuxt
+12.test case. -->
